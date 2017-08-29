@@ -4,30 +4,41 @@ Opcionais Funcionando:
 Valor do Projeto: _________ pontos.
 ***************************************************************/
 
+#include "simulation.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Servidores {
-  int numero;
-  // Clientes *fila;
-  float taxa;
-  int tempo;
-  struct Servidores *prox;
-} tServidores;
-
-int main() {
-  int nservidores, i;
+int main(int argc, char *argv[]) {
+  int nservidores = 3, i;
+  int taxaCliente = 100, tempoAtendimento = 1000;
+  double tempoDecorrido;
   tServidores *inicio, *sp;
   inicio = (tServidores *)malloc(sizeof(tServidores));
   sp = inicio;
 
-  printf("Numero de Servidores?\n");
-  scanf("%i", &nservidores);
+  /***********************************************************
+                        Argumentos
+                -n100 para 100 Servidores
+                -t12 para um novo cliente a cada 12ms
+                -a20 para tempo de atendimento do servidor de 20ms
+*/
+
+  for (i = 1; i < argc; i++) {
+    switch (argv[i][1]) {
+    case 'n':
+      nservidores = atoi(&argv[i][2]);
+      break;
+    case 't':
+      taxaCliente = atoi(&argv[i][2]);
+      break;
+    case 'a':
+      tempoAtendimento = atoi(&argv[i][2]);
+      break;
+    }
+  }
+  /***********************************************************/
+  // printf("%i\n", nservidores);
   for (i = 0; i < nservidores; i++) {
-    printf("Servidor %i\n\tTaxa de chegada dos clientes:", i + 1);
-    scanf("%f", &(sp->taxa));
-    printf("\tTempo de atendimento do clientes (Em ms):");
-    scanf("%i", &(sp->tempo));
     if (i == nservidores - 1)
       sp->prox = NULL;
     else {
@@ -36,7 +47,7 @@ int main() {
     }
   }
 
-  // tbigData bigData = simulacao(&inicio);
-  // geraRelatorio(bigData);
+  tempoDecorrido = simulacao(&inicio, nservidores, taxaCliente, tempoAtendimento);
+  // geraRelatorio(inicio);
   return 0;
 }
